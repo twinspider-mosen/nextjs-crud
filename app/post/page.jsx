@@ -4,7 +4,6 @@ import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
-
 // Fetch posts from the API
 async function fetchPosts() {
   const response = await fetch('/api/post');
@@ -64,32 +63,28 @@ export default function Home() {
 
   return (
     <div className="p-24">
-     <div className="flex flex-row items-center gap-5">
+      
+
+      <div className="flex flex-row items-center gap-5">
      <h1 className="text-4xl">Posts</h1><Link href="/post/create">
      <Button variant="outline">Create New</Button></Link>
      </div>
-
-      {/* Pass the onPostCreated callback to InputForm */}
-      <div className="w-96">
-        {/* <InputForm onPostCreated={onPostCreated} /> */}
-      </div>
 
       {loading && <p>Loading posts...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
 
       <div className="flex flex-wrap gap-8 items-center py-5">
-        {posts.length === 0 ? (
+        {!loading && posts.length === 0 ? (
           <p>No posts available</p> 
         ) : (
           posts.map((post) => (
             <Card key={post.id} className="p-8">
-              <h1 className="text-2xl font-bold">{post.title}</h1>
+            <Link href={"/post/"+post.id}>  <h1 className="text-2xl font-bold">{post.title}</h1></Link>
               <p>{post.content}</p>
              
                 <Button className="my-6" onClick={() => deletePost(post.id)}>
                   Delete
-                </Button>
-            
+          </Button>
             </Card>
           ))
         )}

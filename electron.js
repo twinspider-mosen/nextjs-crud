@@ -1,3 +1,4 @@
+// main.js (Electron main process)
 
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
@@ -6,41 +7,38 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 800,
+    height: 600,
     webPreferences: {
-      nodeIntegration: false, 
-      contextIsolation: true, 
-    }
+      preload: path.join(__dirname, 'preload.js'), // Specify the preload script
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
   });
 
-  mainWindow.loadURL('http://localhost:3000'); 
-  
-  
-//   mainWindow.webContents.openDevTools();
+  mainWindow.loadURL('http://localhost:3000');  // Assuming your Next.js app runs on localhost:3000
 
-  // Handle window closed event
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  // Listen for the print command from renderer process
+  ipcMain.on('print-content', () => {
+    const webContents = mainWindow.webContents;
+    webContents.print({}, (success, failureReason) => {
+      if (success) {
+        console.log('Printed successfully');
+      } else {
+        console.error('Failed to print:', failureReason);
+      }
+    });
   });
 }
 
-// Electron will initialize when it's ready
 app.whenReady().then(() => {
   createWindow();
 
-  // Quit when all windows are closed (macOS compatibility)
-  app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-  });
-
-  // Handle macOS behavior (app stays open even after all windows are closed)
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});

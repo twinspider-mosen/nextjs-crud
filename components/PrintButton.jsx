@@ -1,27 +1,29 @@
-'use client'
+'use client';  // Ensures this code is run on the client-side
 
-import { useRef } from 'react';
-import { Button } from './ui/button';
+import { useRef, useEffect } from 'react';
+import { Button } from './ui/button';  // Assuming you have a custom Button component
 
 const PrintButton = () => {
   // Create a ref to refer to the content you want to print
   const printContentRef = useRef();
 
+  // Make sure the electron API is available
   const handlePrint = () => {
-    // Open a new window for printing
-    const printWindow = window.open('', '', 'height=600,width=800');
-
-    // Get the content to print from the ref
-    const content = printContentRef.current;
-
-    // Set the content in the new window
-    printWindow.document.write('<html><head><title>Print</title></head><body>');
-    printWindow.document.write(content.innerHTML);  // Copy the HTML content to the print window
-    printWindow.document.write('</body></html>');
-
-    // Close the document and trigger print
-    printWindow.document.close();
-    printWindow.print(); // Open the print dialog
+    if (typeof window !== 'undefined' && window.electron) {
+      // If Electron API is available, send a print command to the main process
+      window.electron.sendPrintCommand();
+    } else {
+      // If we're not in an Electron environment, fallback to the window.print() method
+      const printWindow = window.open('', '', 'height=600,width=800');
+      const content = printContentRef.current;
+      
+      printWindow.document.write('<html><head><title>Print</title></head><body>');
+      printWindow.document.write(content.innerHTML);  // Copy the HTML content to the print window
+      printWindow.document.write('</body></html>');
+      
+      printWindow.document.close();
+      printWindow.print();  // Open the print dialog
+    }
   };
 
   return (
@@ -33,7 +35,9 @@ const PrintButton = () => {
       </div>
 
       {/* Button to trigger printing */}
-      <Button onClick={handlePrint}>Print</Button>
+      <Button id="print" onClick={handlePrint}>
+        Print
+      </Button>
     </div>
   );
 };

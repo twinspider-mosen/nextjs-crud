@@ -4,6 +4,7 @@ import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
+import { Search } from "lucide-react";
 // Fetch posts from the API
 async function fetchPosts() {
   const response = await fetch('/api/post');
@@ -47,7 +48,7 @@ export default function Home() {
 
   const deletePost = async (postId) => {
     try {
-      const response = await fetch(`/api/post/delete/${postId}`, {
+      const response = await fetch(`/api/post/${postId}`, {
         method: "DELETE",
       });
 
@@ -79,7 +80,7 @@ export default function Home() {
         ) : (
           posts.map((post) => (
             <Card key={post.id} className="p-8">
-            <Link href={"/post/"+post.id}>  <h1 className="text-2xl font-bold">{post.title}</h1></Link>
+            <Link href={{pathname:'/post/',query:{search:post.id}}}>  <h1 className="text-2xl font-bold">{post.title}</h1></Link>
               <p>{post.content}</p>
              
                 <Button className="my-6" onClick={() => deletePost(post.id)}>

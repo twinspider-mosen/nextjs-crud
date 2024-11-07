@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
@@ -8,16 +8,16 @@ import PrintButton from "@/components/PrintButton";
 
 // Fetch posts from the API
 async function fetchPosts() {
-  const response = await fetch('/api/post');
+  const response = await fetch("/api/post");
   if (response.ok) {
     const data = await response.json();
     return data;
   }
-  throw new Error('Failed to fetch posts');
+  throw new Error("Failed to fetch posts");
 }
 
 export default function Home() {
-  const [posts, setPosts] = useState([]); 
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +26,7 @@ export default function Home() {
     const getPosts = async () => {
       try {
         const data = await fetchPosts();
-        setPosts(data); 
+        setPosts(data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -54,27 +54,33 @@ export default function Home() {
       });
 
       if (response.ok) {
-        setPosts(posts.filter(post => post.id !== postId)); // Remove the deleted post from state
+        setPosts(posts.filter((post) => post.id !== postId)); // Remove the deleted post from state
       } else {
-        console.log('Failed to delete post');
+        console.log("Failed to delete post");
       }
     } catch (error) {
-      console.log('Error deleting post:', error);
+      console.log("Error deleting post:", error);
     }
   };
 
   return (
-    <div className="p-24">
-     <div className="flex flex-row items-center gap-5">
-     <h1 className="text-4xl">Posts</h1><Link href="/post/create">
-     <Button variant="outline">Create New</Button></Link>
-     </div>
-     <div className="flex flex-row items-center gap-5">
-     <h1 className="text-4xl">Print File</h1>
-     <PrintButton/>
-     </div>
+    <div className="p-24 space-y-10">
+      <div className="flex flex-row items-center gap-5">
+        <h1 className="text-4xl">Posts</h1>
+        <Link href="/post/create">
+          <Button variant="outline">Create New</Button>
+        </Link>
+        
+        <Link href="/post/">
+          <Button variant="outline">See All</Button>
+        </Link>
+      </div>
+      <div className="flex flex-row items-center gap-5">
+        <h1 className="text-4xl">Print File</h1>
+        <PrintButton />
+      </div>
 
-{/* 
+      {/* 
       <div className="w-96">
       </div>
 

@@ -4,6 +4,7 @@ import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
+import PrintButton from "@/components/PrintButton";
 
 // Fetch posts from the API
 async function fetchPosts() {
@@ -68,17 +69,20 @@ export default function Home() {
      <h1 className="text-4xl">Posts</h1><Link href="/post/create">
      <Button variant="outline">Create New</Button></Link>
      </div>
+     <div className="flex flex-row items-center gap-5">
+     <h1 className="text-4xl">Print File</h1>
+     <PrintButton/>
+     </div>
 
-      {/* Pass the onPostCreated callback to InputForm */}
+{/* 
       <div className="w-96">
-        {/* <InputForm onPostCreated={onPostCreated} /> */}
       </div>
 
       {loading && <p>Loading posts...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
 
       <div className="flex flex-wrap gap-8 items-center py-5">
-        {posts.length === 0 ? (
+        {!loading && posts.length === 0 ? (
           <p>No posts available</p> 
         ) : (
           posts.map((post) => (
@@ -93,7 +97,7 @@ export default function Home() {
             </Card>
           ))
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

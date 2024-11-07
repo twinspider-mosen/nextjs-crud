@@ -43,7 +43,7 @@
     "appId": "com.example.blogapp",
     "productName": "BlogApp",
     "files": [
-      "main.js",
+      "electron.js",
       "next.config.js",
       "node_modules/**",
       "package.json",
@@ -59,10 +59,12 @@
       "icon": "build/icon.ico", 
       "requestedExecutionLevel": "requireAdministrator"
     },
-    "mac": {
+     "mac": {
       "target": "dmg",
       "icon": "build/icon.icns",  
       "category": "public.app-category.utilities"
     }
+
+   
   }
 }

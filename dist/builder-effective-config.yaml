@@ -5,7 +5,7 @@ appId: com.example.blogapp
 productName: BlogApp
 files:
   - filter:
-      - main.js
+      - electron.js
       - next.config.js
       - node_modules/**
       - package.json
